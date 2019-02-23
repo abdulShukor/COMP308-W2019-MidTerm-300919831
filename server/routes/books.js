@@ -44,10 +44,24 @@ router.get('/add', (req, res, next) => {
 // POST process the Book Details page and create a new Book - CREATE
 router.post('/add', (req, res, next) => {
 
-    /*****************
-     * ADD CODE HERE *
-     *****************/
+  let newContact = book({
+      "title": req.body.title,
+      "price": req.body.price,
+      "author": req.body.author,
+      "genre": req.body.genre
 
+  });
+
+  book.create(newContact, (err, book) => {
+      if(err) {
+          console.log(err);
+          res.end(err);
+      }
+      else {
+          // refresh the contact list
+          res.redirect('/books');
+      }
+  });
 });
 
 // GET the Book Details page in order to edit an existing Book
@@ -68,12 +82,25 @@ router.post('/:id', (req, res, next) => {
 });
 
 // GET - process the delete by user id
-router.get('/delete/:id', (req, res, next) => {
-
-    /*****************
+router.get('/delete/:id',  (req, res, next) => {
+  /*****************
      * ADD CODE HERE *
      *****************/
+  let id = req.params.id;
+
+  book.remove({_id: id}, (err) => {
+      if(err) {
+          console.log(err);
+          res.end(err);
+      }
+      else {
+          // refresh the book list
+          res.redirect('/books');
+      }
+  });
 });
+
+
 
 
 module.exports = router;
