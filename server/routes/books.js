@@ -45,10 +45,10 @@ router.get('/add', (req, res, next) => {
 router.post('/add', (req, res, next) => {
 
   let newContact = book({
-      "title": req.body.title,
-      "price": req.body.price,
-      "author": req.body.author,
-      "genre": req.body.genre
+      "Title": req.body.title,
+      "Price": req.body.price,
+      "Author": req.body.author,
+      "Genre": req.body.genre
 
   });
 
@@ -58,7 +58,7 @@ router.post('/add', (req, res, next) => {
           res.end(err);
       }
       else {
-          // refresh the contact list
+          // refresh the book list
           res.redirect('/books');
       }
   });
