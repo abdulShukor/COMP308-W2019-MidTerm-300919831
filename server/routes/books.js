@@ -1,3 +1,8 @@
+/*Name: Abdul Shukor 
+StudentID: 300919831
+MidTerm Test COMP308
+Date:2019-02-23 */
+
 // modules required for routing
 let express = require('express');
 let router = express.Router();
@@ -11,6 +16,7 @@ router.get('/', (req, res, next) => {
   // find all books in the books collection
   book.find( (err, books) => {
     if (err) {
+    // The Server will give you error massage if the application get crash. 
       return console.error(err);
     }
     else {
@@ -25,11 +31,10 @@ router.get('/', (req, res, next) => {
 
 //  GET the Book Details page in order to add a new Book
 router.get('/add', (req, res, next) => {
-     /*****************
-     * ADD CODE HERE *
-     *****************/
+    
   book.find((err, books) => {
     if (err) {
+    // The Server will give you error massage if the application get crash. 
       return console.error(err);
     }
     else {
@@ -53,6 +58,7 @@ router.post('/add', (req, res, next) => {
   });
 
   book.create(newContact, (err, book) => {
+        // Server will give you error massage if the application get crash. 
       if(err) {
           console.log(err);
           res.end(err);
@@ -64,31 +70,56 @@ router.post('/add', (req, res, next) => {
   });
 });
 
-// GET the Book Details page in order to edit an existing Book
-router.get('/:id', (req, res, next) => {
 
-    /*****************
-     * ADD CODE HERE *
-     *****************/
+
+/// GET the Book Details page in order to edit an existing Book
+router.get("/:id", (req, res, next) => {
+  let id = req.params.id;
+
+  book.findById(id, (err, bookObject) => {
+    if (err) {
+      // The Server will give you error massage if the application get crash. 
+      console.log(err);
+      res.end(err);
+    } else {
+      res.render("books/details", {
+        title: "Edit Book",
+        books: bookObject
+      });
+    }
+  });
 });
 
 // POST - process the information passed from the details form and update the document
-router.post('/:id', (req, res, next) => {
+router.post("/:id", (req, res, next) => {
+  let id = req.params.id;
 
-    /*****************
-     * ADD CODE HERE *
-     *****************/
+  let updatedBook = book({
+    "_id": id,
+    "Title": req.body.title,
+    "Price": req.body.price,
+    "Author": req.body.author,
+    "Genre": req.body.genre
+  });
 
+  book.update({ _id: id }, updatedBook, (err) => {
+    if (err) {
+   // The Server will give you error massage if the application get crash. 
+      console.log(err);
+      res.end(err);
+    } else {
+   // refresh the book list
+      res.redirect("/books");
+    }
+  });
 });
-
 // GET - process the delete by user id
 router.get('/delete/:id',  (req, res, next) => {
-  /*****************
-     * ADD CODE HERE *
-     *****************/
+  
   let id = req.params.id;
 
   book.remove({_id: id}, (err) => {
+    // The Server will give you error massage if the application get crash. 
       if(err) {
           console.log(err);
           res.end(err);
@@ -99,8 +130,5 @@ router.get('/delete/:id',  (req, res, next) => {
       }
   });
 });
-
-
-
 
 module.exports = router;

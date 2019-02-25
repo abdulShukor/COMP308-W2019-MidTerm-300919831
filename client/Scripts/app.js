@@ -1,4 +1,8 @@
 /* custom JS goes here */
+/*Name: Abdul Shukor 
+StudentID: 300919831
+MidTerm Test COMP308
+Date:2019-02-23 */
 
 /* pagination code from http://www.bootply.com/lxa0FF9yhw */
 $.fn.pageMe = function(opts){
@@ -108,7 +112,7 @@ $.fn.pageMe = function(opts){
   $(".btn-danger").click(function(event){
     if(!confirm("Are you sure?")) {
       event.preventDefault();
-      window.location.assign("/games");
+      window.location.assign("/books");
     }
   });
 
