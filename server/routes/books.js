@@ -16,13 +16,14 @@ router.get('/', (req, res, next) => {
   // find all books in the books collection
   book.find( (err, books) => {
     if (err) {
-    // The Server will give you error massage if the application get crash. 
+    // The Server error. 
       return console.error(err);
     }
     else {
       res.render('books/index', {
         title: 'Books',
-        books: books
+        books: books,
+        displayName: req.user ? req.user.displayName : ""
       });
     }
   });
@@ -40,7 +41,8 @@ router.get('/add', (req, res, next) => {
     else {
       res.render('books/details', {
         title: 'Add a new book',
-        books: books
+        books: books,
+        displayName: req.user ? req.user.displayName : ""
       });
     }
   });
@@ -84,7 +86,8 @@ router.get("/:id", (req, res, next) => {
     } else {
       res.render("books/details", {
         title: "Edit Book",
-        books: bookObject
+        books: bookObject,
+        displayName: req.user ? req.user.displayName : ""
       });
     }
   });

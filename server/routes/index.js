@@ -2,21 +2,28 @@
 let express = require('express');
 let router = express.Router();
 let mongoose = require('mongoose');
+let passport = require("passport");
 
 // define the book model
 let book = require('../models/books');
+let user = require('../models/users');
+
+let User = user.User; 
+
 
 /* GET home page. wildcard */
 router.get('/', (req, res, next) => {
   res.render('content/index', {
     title: 'Home',
-    books: ''
+    books: '',
+    displayName: req.user ? req.user.displayName : ""
    });
 });
 
 
 /* GET - displays the Login Page */
 router.get('/login', (req, res, next) => {
+  //check if the user is already exist
   if (!req.user) {
     res.render("auth/login", {
       title: "Login",
@@ -32,6 +39,7 @@ router.get('/login', (req, res, next) => {
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', 
   (err, user, info) => {
+    // server error?
     if(err) {
       return next(err);
     }
@@ -40,6 +48,7 @@ router.post('/login', (req, res, next) => {
       return res.redirect('/login');
     }
     req.logIn(user, (err) => {
+      // server error?
       if(err) {
         return next(err);
       }
@@ -79,6 +88,7 @@ router.post('/register', (req, res, next) => {
           "registerMessage",
           "Registration Error: User Already Exists"
         );
+        
         console.log("Error: User Already Exists");
       }
       return res.render("auth/register", {
@@ -95,7 +105,7 @@ router.post('/register', (req, res, next) => {
   });
 });
 
-/* GET - perform the user logout */
+/* GET - perform the user logout the book list*/
 router.get('/logout', (req, res, next) => {
   req.logout();
   res.redirect("/");
